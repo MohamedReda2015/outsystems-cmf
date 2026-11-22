@@ -1,0 +1,81 @@
+{
+  "skill_name": "outsystems-cmf",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We have the Case Management Framework installed in our O11 factory. Design a permit-application app: applicant submits, a reviewer checks documents and can return for info, a manager approves or rejects. Arabic and English.",
+      "expected_output": "Places CMF as a shared Core app consumed only from <App>_BL through a CaseManagement wrapper; business entity with CaseId and mirrored StatusId in CS; config static entities with GUIDs; idempotent bootstrap; fills the case-definition spec and runs the validator; group assignment, server-side allowed actions, comments on reject/return, SLAs with calendars and escalation, notifications after commit, inbox/detail/timeline UI, transition test matrix.",
+      "expectations": [
+        "Only the BL module references CMF API modules; CW and FE call BL",
+        "Starts with an inventory of the installed CMF _API modules instead of inventing action names",
+        "Defines statuses/activities/actions as static entities with stable GUIDs and a bootstrap",
+        "States the status mirror is written only by the BL wrapper in the same transaction",
+        "Assigns human activities to groups and re-checks allowed actions on the server",
+        "Requires a comment for Reject and ReturnForInfo",
+        "Uses the case-definition spec template and the validator",
+        "Cites rule IDs (e.g. CAR-04, CDF-02, CST-01, CAC-02, CSC-01)"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our CMF app throws 'Status is not valid for the status set' when moving a case to PendingInfo. What should I check?",
+      "expected_output": "Explains the status must belong to the case's definition status set and have a unique GUID; checks for copied/duplicated GUIDs, a status from another definition, deactivated status, bootstrap not registering it; runs the validator; reads back the definition; walks the diagnosis runbook; warns against fixing with SQL on CMF tables.",
+      "expectations": [
+        "Checks that the status GUID belongs to this case's definition",
+        "Checks GUID uniqueness / copy-paste duplicates",
+        "Checks the bootstrap registered the status",
+        "Suggests the validator or reading the definition back",
+        "Does not suggest editing CMF tables or modules directly",
+        "Cites CST-02 / CDF-02 / CLL-01"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "To speed things up, our CW inbox block calls CaseServices_API directly, and the Approve button is shown when Request.Status = 'UnderReview'. Review this.",
+      "expected_output": "Flags CW referencing CMF (CAR-04) and CMF structures leaking (CAR-05); client-side status-based actions not re-checked on the server (CAC-02, CSC-03 Blocker); proposes BL read wrapper with server-side paging, allowed actions from CMF via BL, re-check on submit, access + ownership check; uses the review report template.",
+      "expectations": [
+        "Flags the CW → CaseServices_API reference as a violation",
+        "Flags status-driven buttons without server re-check as a security blocker",
+        "Proposes a BL wrapper that returns BL Structures",
+        "Proposes reading allowed actions from CMF via BL and re-checking on submit",
+        "Uses severities and rule IDs"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "We want to remove the PendingInfo status and the ProvideMissingInfo activity from our live CMF case type. About 300 cases are open.",
+      "expected_output": "Refuses hard delete: deactivate, keep for history; counts open cases per status/activity; migration plan for running instances (finish/migrate/terminate), process versioning per outsystems-bpt PVR rules, update routing table and spec version, test on a production copy, regression suite.",
+      "expectations": [
+        "Says to deactivate rather than delete used statuses/activities",
+        "Asks for or plans counting live instances in that status/activity",
+        "Produces a running-instance / migration plan",
+        "References process live-instance safety (PVR-01) and COP-04",
+        "Requires testing on production-like data"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "I configured a CMF state machine Draft→Submitted→Approved. When the reviewer closes the ReviewRequest activity with Case_CloseActivity the case stays in Submitted. Then I added an Assign after Case_CloseActivity to update Request.Status, but when it fails nothing rolls back. Why?",
+      "expected_output": "Explains CMF never moves status automatically; Case_CloseActivity changes status only when Status is passed; the wrapper must pass the target from the spec; Case_CloseActivity commits the transaction so writes after it can't roll back; reorder: validate, write mirror and business data, close last, or use Case_CloseActivityAsync.",
+      "expectations": [
+        "States CMF does not change status by itself even with a state machine",
+        "Says to pass the target Status to Case_CloseActivity",
+        "States Case_CloseActivity commits the current transaction",
+        "Proposes writing everything before the close (close last) or Case_CloseActivityAsync",
+        "Cites CST-08 and CAC-09"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "We lowered access on one sensitive case to Read for the Reviewers group with Case_UpdateGroupAccess, but reviewers can still approve it. Access control is on for the definition.",
+      "expected_output": "Explains highest-wins between definition and instance grants; the definition grants Write so instance Read can't lower it; set minimal definition-level grants (CaseDefinition_UpdateGroupAccess) and grant Write per case; plus house BL role/ownership checks in the approve wrapper.",
+      "expectations": [
+        "Explains that the higher of definition and instance permission wins",
+        "Distinguishes Case_UpdateGroupAccess (instance) from CaseDefinition_UpdateGroupAccess (definition)",
+        "Recommends minimal definition-level grants",
+        "Adds the house BL role/ownership check (CSC-01)",
+        "Cites CSC-09"
+      ]
+    }
+  ]
+}

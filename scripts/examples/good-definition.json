@@ -1,0 +1,366 @@
+{
+  "specVersion": "1.0",
+  "languages": [
+    "en",
+    "ar"
+  ],
+  "definitions": [
+    {
+      "key": "Request",
+      "guid": "127ace3f-36c9-4358-bddb-31f7bac4602b",
+      "version": "1.0",
+      "module": "Request_CS",
+      "labels": {
+        "en": "Request",
+        "ar": "طلب"
+      },
+      "description": "Service request handled by reviewers and approvers.",
+      "hasAccessControl": true,
+      "purge": {
+        "purgeTypeId": "DeleteAll",
+        "daysToPurgeCase": -1,
+        "daysToPurgeProcess": 365
+      },
+      "groups": [
+        {
+          "key": "Applicants"
+        },
+        {
+          "key": "Reviewers"
+        },
+        {
+          "key": "Approvers"
+        },
+        {
+          "key": "Supervisors"
+        }
+      ],
+      "statuses": [
+        {
+          "key": "Draft",
+          "guid": "2a0f592a-4bcc-4fa0-89a2-34c45453e41e",
+          "initial": true,
+          "terminal": false,
+          "labels": {
+            "en": "Draft",
+            "ar": "مسودة"
+          },
+          "alias": "Draft",
+          "isActive": true
+        },
+        {
+          "key": "UnderReview",
+          "guid": "14b9428f-9634-49f4-9013-412502902036",
+          "initial": false,
+          "terminal": false,
+          "labels": {
+            "en": "Under review",
+            "ar": "قيد المراجعة"
+          },
+          "alias": "UnderReview",
+          "isActive": true
+        },
+        {
+          "key": "PendingInfo",
+          "guid": "d3bc8159-9edf-4ead-9477-8325692ed836",
+          "initial": false,
+          "terminal": false,
+          "labels": {
+            "en": "Pending information",
+            "ar": "بانتظار المعلومات"
+          },
+          "alias": "PendingInfo",
+          "isActive": true
+        },
+        {
+          "key": "PendingApproval",
+          "guid": "0ce87dc0-53cc-4248-b94d-d96cbe9f83d7",
+          "initial": false,
+          "terminal": false,
+          "labels": {
+            "en": "Pending approval",
+            "ar": "بانتظار الاعتماد"
+          },
+          "alias": "PendingApproval",
+          "isActive": true
+        },
+        {
+          "key": "Approved",
+          "guid": "c47f98e8-7d1a-4d6b-883e-963640775f08",
+          "initial": false,
+          "terminal": true,
+          "labels": {
+            "en": "Approved",
+            "ar": "معتمد"
+          },
+          "alias": "Approved",
+          "isActive": true
+        },
+        {
+          "key": "Rejected",
+          "guid": "62d7dc8d-f003-4762-ac43-0e623817a92e",
+          "initial": false,
+          "terminal": true,
+          "labels": {
+            "en": "Rejected",
+            "ar": "مرفوض"
+          },
+          "alias": "Rejected",
+          "isActive": true
+        },
+        {
+          "key": "Cancelled",
+          "guid": "fa79331f-c8ba-413d-a9f2-2915da07c35c",
+          "initial": false,
+          "terminal": true,
+          "labels": {
+            "en": "Cancelled",
+            "ar": "ملغى"
+          },
+          "alias": "Cancelled",
+          "isActive": true
+        }
+      ],
+      "actions": [
+        {
+          "key": "Submit",
+          "guid": "b9a854a5-37ac-46c7-9c48-89552a00641f",
+          "kind": "positive",
+          "needsComment": false,
+          "needsConfirmation": true,
+          "labels": {
+            "en": "Submit",
+            "ar": "إرسال"
+          }
+        },
+        {
+          "key": "Approve",
+          "guid": "fb162546-8f99-44f8-a399-12c64d228894",
+          "kind": "positive",
+          "needsComment": false,
+          "needsConfirmation": true,
+          "labels": {
+            "en": "Approve",
+            "ar": "اعتماد"
+          }
+        },
+        {
+          "key": "Recommend",
+          "guid": "66211429-1cb0-43c1-af45-3c6a8fbc7bba",
+          "kind": "positive",
+          "needsComment": true,
+          "needsConfirmation": false,
+          "labels": {
+            "en": "Recommend",
+            "ar": "توصية"
+          }
+        },
+        {
+          "key": "Reject",
+          "guid": "eebd0006-1f7a-4752-845a-86cff8a8f405",
+          "kind": "negative",
+          "needsComment": true,
+          "needsConfirmation": true,
+          "labels": {
+            "en": "Reject",
+            "ar": "رفض"
+          }
+        },
+        {
+          "key": "ReturnForInfo",
+          "guid": "572071e2-115c-4794-942a-6fafea446c5d",
+          "kind": "negative",
+          "needsComment": true,
+          "needsConfirmation": true,
+          "labels": {
+            "en": "Return for information",
+            "ar": "إعادة لاستكمال المعلومات"
+          }
+        },
+        {
+          "key": "ProvideInfo",
+          "guid": "65871110-dd8d-47d2-a83f-34bd3fb11f53",
+          "kind": "positive",
+          "needsComment": true,
+          "needsConfirmation": false,
+          "labels": {
+            "en": "Provide information",
+            "ar": "تقديم المعلومات"
+          }
+        }
+      ],
+      "activities": [
+        {
+          "key": "CompleteRequest",
+          "guid": "896fdece-4f06-4669-b152-b5591ff1091c",
+          "type": "human",
+          "assignTo": {
+            "group": "Applicants"
+          },
+          "actions": [
+            "Submit"
+          ],
+          "sla": {
+            "target": "P30D",
+            "calendar": "Default",
+            "escalateTo": "Supervisors"
+          },
+          "labels": {
+            "en": "Complete request",
+            "ar": "استكمال الطلب"
+          }
+        },
+        {
+          "key": "ReviewRequest",
+          "guid": "6090a983-2187-411e-bebe-125367e6890a",
+          "type": "human",
+          "assignTo": {
+            "group": "Reviewers"
+          },
+          "actions": [
+            "Recommend",
+            "Reject",
+            "ReturnForInfo"
+          ],
+          "sla": {
+            "target": "P3D",
+            "calendar": "Default",
+            "escalateTo": "Supervisors"
+          },
+          "labels": {
+            "en": "Review request",
+            "ar": "مراجعة الطلب"
+          }
+        },
+        {
+          "key": "ProvideMissingInfo",
+          "guid": "a7c13f82-159c-4e1d-a8b0-1188b52c25c9",
+          "type": "human",
+          "assignTo": {
+            "group": "Applicants"
+          },
+          "actions": [
+            "ProvideInfo"
+          ],
+          "sla": {
+            "target": "P10D",
+            "calendar": "Default",
+            "escalateTo": "Supervisors"
+          },
+          "labels": {
+            "en": "Provide missing information",
+            "ar": "تقديم المعلومات الناقصة"
+          }
+        },
+        {
+          "key": "ApproveRequest",
+          "guid": "b952926c-3fa6-424c-bcf6-a8b7d1735e11",
+          "type": "human",
+          "assignTo": {
+            "group": "Approvers"
+          },
+          "actions": [
+            "Approve",
+            "Reject"
+          ],
+          "sla": {
+            "target": "P2D",
+            "calendar": "Default",
+            "escalateTo": "Supervisors"
+          },
+          "labels": {
+            "en": "Approve request",
+            "ar": "اعتماد الطلب"
+          }
+        },
+        {
+          "key": "AssignReviewer",
+          "guid": "eadcac2f-1c7a-4a02-8d85-1d83af682ac0",
+          "type": "automatic",
+          "actions": []
+        }
+      ],
+      "transitions": [
+        {
+          "from": "Draft",
+          "to": "UnderReview",
+          "trigger": {
+            "activity": "CompleteRequest",
+            "action": "Submit"
+          },
+          "mechanism": "activityAction"
+        },
+        {
+          "from": "UnderReview",
+          "to": "PendingApproval",
+          "trigger": {
+            "activity": "ReviewRequest",
+            "action": "Recommend"
+          },
+          "mechanism": "activityAction"
+        },
+        {
+          "from": "UnderReview",
+          "to": "Rejected",
+          "trigger": {
+            "activity": "ReviewRequest",
+            "action": "Reject"
+          },
+          "mechanism": "activityAction"
+        },
+        {
+          "from": "UnderReview",
+          "to": "PendingInfo",
+          "trigger": {
+            "activity": "ReviewRequest",
+            "action": "ReturnForInfo"
+          },
+          "mechanism": "activityAction"
+        },
+        {
+          "from": "PendingInfo",
+          "to": "UnderReview",
+          "trigger": {
+            "activity": "ProvideMissingInfo",
+            "action": "ProvideInfo"
+          },
+          "mechanism": "activityAction"
+        },
+        {
+          "from": "PendingInfo",
+          "to": "Cancelled",
+          "trigger": {
+            "system": "SlaExpired"
+          },
+          "mechanism": "statusUpdate"
+        },
+        {
+          "from": "PendingApproval",
+          "to": "Approved",
+          "trigger": {
+            "activity": "ApproveRequest",
+            "action": "Approve"
+          },
+          "mechanism": "activityAction"
+        },
+        {
+          "from": "PendingApproval",
+          "to": "Rejected",
+          "trigger": {
+            "activity": "ApproveRequest",
+            "action": "Reject"
+          },
+          "mechanism": "activityAction"
+        },
+        {
+          "from": "Draft",
+          "to": "Cancelled",
+          "trigger": {
+            "system": "DraftExpired"
+          },
+          "mechanism": "statusUpdate"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+---
+description: OutSystems 11 Case Management Framework (CMF) standards — placement on the 3-layer canvas, BL wrapper over CMF APIs, case definitions and bootstrap, explicit status changes, Case_CloseActivity transaction order, access control, SLAs, inbox UI, upgrades. Apply when designing, building or reviewing CMF case-management apps.
+globs:
+alwaysApply: false
+---
+
+Follow the OutSystems CMF skill in `outsystems-cmf/` (copy that folder into the repository, or adjust the path).
+
+1. Read `outsystems-cmf/SKILL.md` first. Load only the `references/*.md` files the task needs; `references/cmf-api-map.md` is the starting list of CMF actions — verify every name in the installed modules.
+2. The core rules in `outsystems-cmf/adapters/AGENTS.md` (between the BEGIN/END markers) are always in force.
+3. Before building a case type, fill `outsystems-cmf/templates/case-definition-spec.md`, export it to JSON and run `node outsystems-cmf/scripts/check_case_definition.mjs <definition.json>`.
+4. For reviews, cite rule IDs from `references/review-checklist.md` and use `templates/cmf-review-report.md`.

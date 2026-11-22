@@ -1,0 +1,34 @@
+name: Bug / inaccuracy
+description: A rule or CMF fact is wrong or outdated, or a script misbehaves
+labels: ["bug"]
+body:
+  - type: input
+    id: location
+    attributes:
+      label: Where
+      description: File and rule ID (e.g. references/lifecycle-status-and-activities.md, CAC-09) or script name.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: CMF and platform version
+      description: Case Management Framework version (e.g. 1.5.3) and Platform Server version, if relevant.
+  - type: textarea
+    id: issue
+    attributes:
+      label: What is wrong
+      description: What it says now and what it should say.
+    validations:
+      required: true
+  - type: input
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Link to official documentation, Forge release notes, a staff/MVP forum answer, or a reproducible example.
+  - type: textarea
+    id: repro
+    attributes:
+      label: Script reproduction (if a script bug)
+      description: The definition JSON (neutral names, fresh GUIDs), the command and the output.
+      render: shell

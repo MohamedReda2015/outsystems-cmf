@@ -1,0 +1,53 @@
+name: Rule proposal
+description: Propose a new CMF standard, best practice, checklist rule or lesson learned
+labels: ["rule-proposal"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What goes wrong in CMF apps without this rule? (No client names or confidential details.)
+    validations:
+      required: true
+  - type: textarea
+    id: rule
+    attributes:
+      label: Proposed rule
+      description: The rule, written as an instruction, plus one sentence on why it matters.
+    validations:
+      required: true
+  - type: dropdown
+    id: group
+    attributes:
+      label: Group
+      options:
+        - CAR - Architecture and wrapper
+        - CDF - Case definitions and configuration
+        - CST - Statuses and state machine
+        - CAC - Activities and actions
+        - CSC - Security and access control
+        - CSL - SLA, delegation, notifications, retention
+        - CUI - UI patterns
+        - COP - Operations, upgrades, testing
+        - CLL - Lesson learned
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Suggested severity
+      options: [Blocker, Major, Minor]
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source
+      description: Official OutSystems documentation or Forge release notes (preferred), or a staff/MVP forum answer.
+    validations:
+      required: true
+  - type: input
+    id: cmf-version
+    attributes:
+      label: Applies to CMF version
+      description: e.g. all 1.5.x, 1.5.2+, below 1.5.1
