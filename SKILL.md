@@ -3,11 +3,11 @@ name: outsystems-cmf
 description: Design, configure, review and troubleshoot OutSystems 11 Case Management Framework applications. Covers installed API contracts, configuration, statuses, access, activities, commit boundaries, SLAs and upgrades. Includes a definition validator. Use when CMF is selected or already installed; do not assume every approval flow needs CMF.
 license: MIT
 metadata:
-  version: 1.1.1
+  version: 1.2.0
   updated: "2026-11-22"
   platform: OutSystems 11 (CMF Forge component 9179, v1.5.x; Reactive Web back office and portals). ODC notes only.
   agent-independent: "true"
-  companion-skills: outsystems-architecture (layers, modules, rule IDs ARC/HSE/DAT/SEC/PERF); outsystems-backend-conventions (BL logic, transactions, async, rule IDs BLG/BTX/BAS/BER/BSC); outsystems-frontend-conventions (screens, blocks, client logic, rule IDs FET/CLG/ERR/BLK); outsystems-bpt (process design, activities, Light BPT); outsystems-live-style-guide (look)
+  companion-skills: outsystems-architecture (layers, modules, rule IDs ARC/HSE/DAT/SEC/PERF); outsystems-backend-conventions (BL logic, transactions, async, rule IDs BLG/BTX/BAS/BER/BSC); outsystems-frontend-conventions (screens, blocks, client logic, rule IDs FET/CLG/ERR/BLK); outsystems-bpt (process design, activities, Light BPT); outsystems-live-style-guide (look); outsystems-ai-mentor (end-to-end lifecycle orchestrator)
 ---
 
 # OutSystems CMF (Case Management Framework)
@@ -20,6 +20,7 @@ metadata:
 - Preserve the user's requested scope and existing authorization. Continue routine reversible work; a skill does not authorize publishing, dependency changes or production operations beyond that scope. Do not introduce phase-by-phase approval unless the user or environment requires it.
 - Prefer installed API signatures and version-matched official documentation. A repository development branch, community workaround or old project observation is evidence to investigate, not a release guarantee.
 - Report evidence separately: **prepared → model validated → merged → published → runtime verified**. A static checker passing proves only its covered checks on the supplied inventory. Unknown, blocked and not tested remain explicit.
+- Agent work through the Service Studio MCP follows the shared MCP reference in outsystems-architecture (its `service-studio-mcp` reference, rule `OPS-10`): confirm the environment with the user (the MCP can't report it) and stay in Development; one writer per module and a fresh edit session after any human edit or partial merge; read back every write and lay out its flows before merging; keep an agent change log; publish only on an explicit yes. For CMF: agents never edit CMF's own (Forge) modules; case definitions change through the app's configuration data and bootstrap/ensure actions, read back after publish.
 - Read [verification and reliability](references/verification-and-reliability.md) when changing data contracts, concurrent operations, runtime behavior or verification. It contains the concrete acceptance checks and sources for this skill.
 
 
@@ -38,6 +39,7 @@ It works for any agent (Claude, Copilot, Cursor, Codex, Gemini, a custom LLM age
 
 | Question | Skill |
 |---|---|
+| A whole app or feature delivered end to end — phases, gates, increments, which steps the O11 MCP can do and which are manual | **outsystems-ai-mentor** (orchestrates this skill and its companions) |
 | Which module and layer, who may reference whom, app composition, LifeTime SOPs | **outsystems-architecture** |
 | How BL logic, transactions, timers, integrations and server security are written | **outsystems-backend-conventions** |
 | How processes, human/automatic activities, Light BPT and process versions are designed | **outsystems-bpt** |

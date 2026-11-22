@@ -118,6 +118,7 @@ Triage order: Security → Status integrity → Architecture → Performance →
 | COP-08 | Major | Regression suite on every CMF upgrade and process change |
 | COP-09 | Major | Protected CMF modules diagnosed via public API, Service Center and adapter logs; no SQL on CMF internal tables |
 | COP-10 | Minor | App Starter scaffolds renamed, GUIDs regenerated, examples removed and aligned to house layers before the first feature |
+| COP-11 | Major | Agents working through the Service Studio MCP never edit CMF's own (Forge) modules; case-definition changes go through the app's configuration records and idempotent bootstrap/ensure actions, which are re-run and read back after publish | Agent change log; configuration read-back after publish |
 
 
 ## Reliability and evidence (2026-11 review)

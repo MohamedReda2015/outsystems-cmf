@@ -84,3 +84,9 @@ The Case Management App Starter creates `CMAppStarter_CS / _WF / _UI` with examp
 
 ## 8. ODC
 CMF is an O11 framework built on BPT. On ODC there is no CMF: use ODC's workflow capabilities and keep this skill's **principles** — one wrapper over the workflow engine, one status truth, explicit transitions, server-side allowed actions, group assignment, SLA on the server, notifications after commit, versioned definitions with migration plans. Verify current ODC workflow features in the official ODC documentation before designing.
+
+
+## Agent edits through the Service Studio MCP (`COP-11`)
+- CMF's own modules come from Forge: an agent never changes them (the same rule as `CAR-01` for people).
+- Case definitions are **configuration**: statuses, activities, actions and group keys live in the app's static entities and bootstrap/ensure actions. An agent changes the definition there, keeps the stored GUIDs/keys stable, and after the user publishes re-runs the bootstrap and reads the configuration back.
+- Dependencies on new CMF `_API` modules are a manual step in Service Studio (Manage Dependencies, then Apply) before any agent code uses them.
