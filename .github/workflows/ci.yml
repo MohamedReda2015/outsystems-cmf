@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Skill consistency (frontmatter, links, rule IDs, adapters, hygiene)
+        run: node scripts/check_skill.mjs
+
+      - name: Case-definition validator regression
+        run: node scripts/test_validator.mjs
+
+      - name: Validator on the examples
+        run: |
+          node scripts/check_case_definition.mjs scripts/examples/good-definition.json
+          set +e
+          node scripts/check_case_definition.mjs scripts/examples/bad-definition.json > /dev/null
+          [ $? -eq 1 ] || { echo "bad example should exit 1"; exit 1; }
+
+      - name: Evals file is valid JSON
+        run: node -e "JSON.parse(require('fs').readFileSync('evals/evals.json','utf8'))"
+
+      - name: Package the skill (smoke test)
+        run: |
+          git archive --format=zip --prefix=outsystems-cmf/ -o outsystems-cmf.zip HEAD
+          unzip -l outsystems-cmf.zip | grep -q "outsystems-cmf/SKILL.md"
+          ! unzip -l outsystems-cmf.zip | grep -q "outsystems-cmf/.github/"
