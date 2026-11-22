@@ -130,3 +130,10 @@ These manual checks complement, rather than extend the claimed coverage of, the 
 | CRV-02 | Major | Separate requested async outcomes from confirmed CMF status and reconcile drift. |
 | CRV-03 | Major | Verify bootstrap registration and effective access/action-specific permissions. |
 | CRV-04 | Major | Test recovery, live cases and framework upgrades through supported APIs. |
+
+## Cross-skill acceptance
+
+| ID | Severity | Rule | Check |
+|---|---|---|---|
+| CRV-05 | Major | Validate the case/activity relationship and current action-specific permission on the server. | Manual; verification-and-reliability reference. |
+| CRV-06 | Major | Record wrapper boundaries and observe resulting case/activity states, including reassignment races and partial failure. | Manual; verify against the story acceptance cases. |

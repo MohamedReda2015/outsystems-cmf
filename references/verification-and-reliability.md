@@ -43,3 +43,11 @@ Upgrade tests cover active/waiting cases, pending closes, group/delegated activi
 - [Official CMF API index](https://github.com/OutSystems/docs-product/blob/master/src/building-apps/case-management-workflow/case-management-framework/ref/intro.md).
 - [Official transactions](https://github.com/OutSystems/docs-product/blob/master/src/ref/data/database/handling-transactions.md): commit/rollback scope; the async reconciliation model is engineering guidance derived from those boundaries.
 - Anonymized prior-project evidence reviewed 2026-11-22: supervisory reason fields were incorrectly disabled and current-assignee IDs were missing from a consumer contract. These are reusable permission/contract checks, not evidence that a particular CMF release was tested.
+
+### Case, activity and permission evidence
+
+Keep business-record, case-instance and activity-instance identifiers distinct in every wrapper and test. Verify that a submitted activity belongs to the requested case and that the actor may perform this specific operation in its current state. A broad supervisor role or a case visibility flag does not prove permission to assign, close or discard an activity.
+
+Create a small acceptance matrix across role, group, assignment and lifecycle state. For each command record the installed CMF action/signature, explicit or implicit commit point, command result, eventual case/activity state and recovery owner. Test a reassignment or takeover between reading the task and executing the action; return a controlled conflict rather than accepting stale UI permissions.
+
+Where a wrapper combines local writes and CMF operations, inject a failure after each boundary in an isolated test environment and verify the promised outcome. Handoff pending or partially applied results explicitly. These checks supplement, rather than replace, the installed API/transaction inventory.

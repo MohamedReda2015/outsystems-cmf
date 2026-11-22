@@ -192,3 +192,5 @@ Details: `references/architecture-and-modules.md`.
 | `templates/case-definition-spec.md` · `templates/cmf-review-report.md` | new or changed case type; review report |
 | `scripts/check_case_definition.mjs` | validating a definition JSON (`--json`) |
 | `research/sources.md` · `research/assessment-2026-11.md` | where a fact comes from; what changed and why; what is unverified |
+
+For requirement-to-runtime handoffs, also use the cross-skill acceptance section in [verification and reliability](references/verification-and-reliability.md); preserve source/story/criterion IDs and the tested application version.
