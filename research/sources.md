@@ -44,3 +44,8 @@ Note: several official pages were read through a summarizing fetch rather than v
 
 ## House / experience (not official)
 Everything with a rule ID (`CAR`, `CDF`, `CST`, `CAC`, `CSC`, `CSL`, `CUI`, `COP`) is house standard derived from the companion skills, the sources above and project practice; `CLL-*` marks which lessons are public vs project.
+
+
+## Reliability review — 2026-11-22
+
+See [verification and reliability](../references/verification-and-reliability.md) for primary sources, provenance and acceptance cases. Platform facts are separated from house policy and anonymized project observations. A community mirror is not an official publication; installed contracts and version-matched official sources take precedence. Runtime claims were not retested in a live tenant during this documentation review.

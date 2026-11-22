@@ -54,7 +54,7 @@ Triage order: Security → Status integrity → Architecture → Performance →
 |---|---|---|---|
 | CAC-01 | Major | Human activities assigned to groups, never to named users `[auto]` | Process / spec |
 | CAC-02 | Blocker | Allowed actions come from CMF via BL and are re-checked on submit | Action wrappers |
-| CAC-03 | Major | No human-activity destination from a Core process to an FE screen; FE routing table | Process properties; dependencies |
+| CAC-03 | Major | House default: FE routing table; a supported weak Reactive screen destination is a documented alternative, not an upward strong-reference violation | Process properties; dependencies |
 | CAC-04 | Major | Automatic activities small, idempotent, no slow external calls, side effects via outbox | Activity logic |
 | CAC-05 | Minor | Waits modeled as process waits/status+SLA, not per-case polling | Process design |
 | CAC-06 | Major | Rejecting/returning actions require a comment stored in CMF `[auto]` | Spec + wrapper |
@@ -118,3 +118,15 @@ Triage order: Security → Status integrity → Architecture → Performance →
 | COP-08 | Major | Regression suite on every CMF upgrade and process change |
 | COP-09 | Major | Protected CMF modules diagnosed via public API, Service Center and adapter logs; no SQL on CMF internal tables |
 | COP-10 | Minor | App Starter scaffolds renamed, GUIDs regenerated, examples removed and aligned to house layers before the first feature |
+
+
+## Reliability and evidence (2026-11 review)
+
+These manual checks complement, rather than extend the claimed coverage of, the static scripts. Details and acceptance cases: [verification and reliability](verification-and-reliability.md).
+
+| ID | Severity | Rule |
+|---|---|---|
+| CRV-01 | Major | Inventory every commit-capable CMF call, including assignment and discard, against the installed version. |
+| CRV-02 | Major | Separate requested async outcomes from confirmed CMF status and reconcile drift. |
+| CRV-03 | Major | Verify bootstrap registration and effective access/action-specific permissions. |
+| CRV-04 | Major | Test recovery, live cases and framework upgrades through supported APIs. |

@@ -56,13 +56,13 @@ Request_Approve_Logic
   (nothing after this that could fail and expect a rollback)
 ```
 - If something must run after the close and may fail, put it in the process (next activity) or the outbox, not in the same action.
-- `Case_CloseActivityAsync` launches a process that closes the activity later and doesn't commit in the action. Use it when the caller must keep its own transaction semantics; then the UI must tolerate a short delay before the activity disappears (refresh, optimistic message).
+- `Case_CloseActivityAsync` requests asynchronous closure. Verify its implementation/contract and failure behavior in the installed version before relying on caller transaction semantics. Record the requested outcome separately from confirmed status, expose pending progression, and reconcile completion or failure; never claim the business mirror and future closure are atomic.
 - Never call either close in a loop inside one request (bulk actions → timer/BPT batch).
 
 ## 5. Activities (`CAC-01`, `CAC-03`, `CAC-04`, `CAC-05`, `CAC-10`)
 - **Human activities** are BPT human activities extended by CMF.
   - Assigned to a **group** (`Activity_AssignToGroup`; `…ToGroupAndUser` / `…ToUser` only for explicit reassignment) (`CAC-01`).
-  - **No destination screen from a Core process** (`ARC-01`; Reactive has no Destination navigation, `PHA-08`). The FE routing table maps activity key → screen (`CAC-03`). `Case_OpenActivity` returns a URL: use it only if it fits your routing, through BL.
+  - **House routing default**: the FE routing table maps activity key → screen (`CAC-03`). Reactive human-activity destinations are supported on suitable O11 versions (see BPT `PHA-08`); a weak screen destination is not an upward strong-reference violation. Preserve a supported existing design. `Case_OpenActivity` returns a URL: use it only if it fits your routing, through BL.
   - Every human activity has an SLA and escalation (`CSL-01`, `CSL-05`).
   - **Multiple-instance activities**: one activity can be assigned to several users and launches once per user; completion can require all or a subset. Model "all approvers" this way or with child processes (`PDS-10`).
 - **Automatic activities**: small, idempotent, call BL `_Logic`, no slow external calls, side effects through the outbox (`CAC-04`, `BTX-06`).

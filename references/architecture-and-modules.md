@@ -110,4 +110,4 @@ Status names are business states (`Submitted`, `UnderReview`, `PendingInfo`, `Ap
 | Official tutorial shape (CMF in CS) | Already built, documented; runtime calls still in BL |
 | Shared `Case_BL` / `Case_CW` | Platform-owned, generic only |
 | Relaxed mode (FE reading CS) | Never extends to CMF calls |
-Write the choice in the blueprint (architecture skill: `templates/architecture-blueprint.md` there).
+Write the choice in the blueprint (architecture skill: `outsystems-architecture/templates/architecture-blueprint.md` there).

@@ -64,3 +64,13 @@ Who can see / act / supervise / administer; instance grants and revokes per tran
 
 ## 13. Test matrix (`COP-07`)
 Every transition × role: allowed and not allowed. Plus: a move not in the state machine, return-and-resubmit, SLA breach, due date starting on a holiday, delegation, pickup/takeover/release/block, concurrent action, bootstrap re-run and Ready check, anonymous call rejected.
+
+
+## Evidence and acceptance
+
+- Platform/app type, installed versions/theme where relevant, target environment:
+- Existing project decisions and authorized delivery scope:
+- Requirement → element/contract → source of data → verification evidence:
+- Concurrency, retry/unknown outcome, authorization and failure cases relevant to this change:
+- Delivery status: prepared / model validated / merged / published / runtime verified (record only observed stages):
+- Not tested, missing dependency or blocked evidence, and the exact next step:

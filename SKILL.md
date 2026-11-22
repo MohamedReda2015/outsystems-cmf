@@ -1,22 +1,33 @@
 ---
 name: outsystems-cmf
-description: OutSystems Case Management Framework (CMF) standards for O11, aligned with the 3-layer Architecture Canvas and the house Front_End → CW → BL → CS chain. Covers when to use CMF, its placement, a BL wrapper over the CMF _API modules, case definitions as versioned configuration (static entities, GUIDs, SetupCaseManagementApplication bootstrap), the state machine and explicit status changes, Case_CloseActivity transaction order, activities, pickup/takeover/delegation, access control, SLAs and calendars, notifications, timeline, purge, inbox UI, App Starter, upgrades and known version bugs. Includes a case-definition validator, an API map, templates, a review checklist and lessons from docs, forums and projects. Use it whenever an agent designs, builds, configures, reviews or troubleshoots a case-management, approval or task-inbox app on CMF, even if the user only says "add an approval step", "the case is stuck", "Status is not valid for the status set" or "who can see this case".
+description: Design, configure, review and troubleshoot OutSystems 11 Case Management Framework applications. Covers installed API contracts, configuration, statuses, access, activities, commit boundaries, SLAs and upgrades. Includes a definition validator. Use when CMF is selected or already installed; do not assume every approval flow needs CMF.
 license: MIT
 metadata:
   version: 1.1.1
-  updated: 2026-11-22
+  updated: "2026-11-22"
   platform: OutSystems 11 (CMF Forge component 9179, v1.5.x; Reactive Web back office and portals). ODC notes only.
-  agent-independent: true
+  agent-independent: "true"
   companion-skills: outsystems-architecture (layers, modules, rule IDs ARC/HSE/DAT/SEC/PERF); outsystems-backend-conventions (BL logic, transactions, async, rule IDs BLG/BTX/BAS/BER/BSC); outsystems-frontend-conventions (screens, blocks, client logic, rule IDs FET/CLG/ERR/BLK); outsystems-bpt (process design, activities, Light BPT); outsystems-live-style-guide (look)
 ---
 
 # OutSystems CMF (Case Management Framework)
 
+## Scope, evidence and consistency
+
+- Run bundled scripts from the skill directory or use absolute paths; do not assume they exist in the application checkout.
+- Establish O11/ODC, application type, installed component versions and the target environment from available evidence; ask only for information that changes the work.
+- Separate **platform facts**, **house defaults**, **project decisions** and **observed lessons**. Project conventions choose among supported designs; they cannot change runtime behavior. The FE/CW/BL/CS chain is an O11 house pattern, not an ODC requirement.
+- Preserve the user's requested scope and existing authorization. Continue routine reversible work; a skill does not authorize publishing, dependency changes or production operations beyond that scope. Do not introduce phase-by-phase approval unless the user or environment requires it.
+- Prefer installed API signatures and version-matched official documentation. A repository development branch, community workaround or old project observation is evidence to investigate, not a release guarantee.
+- Report evidence separately: **prepared → model validated → merged → published → runtime verified**. A static checker passing proves only its covered checks on the supplied inventory. Unknown, blocked and not tested remain explicit.
+- Read [verification and reliability](references/verification-and-reliability.md) when changing data contracts, concurrent operations, runtime behavior or verification. It contains the concrete acceptance checks and sources for this skill.
+
+
 This skill makes an agent build case-management apps on the OutSystems **Case Management Framework (CMF)** the way a senior OutSystems architect expects them in review:
 - **CMF only when it earns its place**, consumed as a framework and never edited, through one BL wrapper;
 - **case definitions are versioned configuration**: static entities with GUIDs, a verified bootstrap, deployed like code;
 - **status changes are explicit**: CMF validates them, it never makes them; the app passes the target status;
-- **closing an activity commits**: validate and write first, close last;
+- **commit-capable framework actions are explicit boundaries**: validate and write before close, assignment or discard calls that commit;
 - **access is checked twice on the server**: CMF access control *and* the house role + ownership check;
 - **SLAs, delegation, history and retention come from CMF first**, tested on the installed version;
 - **upgrades and live changes are planned**: running instances, GUIDs and status sets never break.
@@ -45,20 +56,17 @@ When they overlap, the owner above wins, with these **deliberate CMF specializat
 
 This skill cites their rule IDs and adds its own: `CAR` architecture, `CDF` definitions, `CST` statuses, `CAC` activities, `CSC` security, `CSL` SLA/delegation/notifications/retention, `CUI` UI, `COP` operations, `CLL` lessons.
 
-## Precedence of rules
-1. **The project's own conventions** (AGENTS.md, blueprint, a CMF setup already in production). Follow them, and say so.
-2. **This house standard.**
-3. **OutSystems official CMF documentation**; the **installed CMF modules** are the truth for action names and signatures.
+## Applying conventions
 
-Security (`CSC-*`, `SEC-*`) and status-integrity rules (`CST-01`, `CST-08`, `CAC-09`, `CDF-02`) are never relaxed by precedence: flag the risk and ask. Never silently rework built definitions; record decisions in AGENTS.md.
+Use the project's documented architecture, naming and design choices where supported. Use this skill's house defaults when the project has no decision. Official documentation and installed contracts determine platform behavior; house preferences never override those facts. Record a consequential deviation and its reason. Escalate unresolved security, data-integrity or compatibility conflicts, not ordinary naming or layout choices.
 
 ## Facts about CMF (from official docs, release notes and staff/MVP answers)
-- OutSystems-supported Forge component for **O11** (9179, stable **1.5.3**, Platform Server Oct 2019+), built on **BPT**, depends on Common Shared Services. Modules are **protected** (can't be opened). **Not on ODC.**
+- OutSystems-supported Forge component for **O11** (9179, **1.5.3 reviewed baseline; verify the installed and current supported release**, Platform Server Oct 2019+), built on **BPT**, depends on Common Shared Services. Modules are **protected** (can't be opened). **Not on ODC.**
 - Public API: `CaseServices_API` (run time), `CaseConfigurations_API` (design time), `CaseProcessConfigurations_API` (process config, SLAs). Catalogue with verification marks: `references/cmf-api-map.md`.
 - Official app shape: `<Entity>_CS` with the business entity whose **Id is a Case Identifier**, static entities `CaseDefinitionConfiguration` and `CaseStatusConfiguration` (GUID ids, one `IsInitial`), a **"When Published" bootstrap timer** calling `SetupCaseManagementApplication(SetupData)`; `<App>_WF` processes calling `Case_AssociateProcess` and ending with `Case_Complete`. **One case definition per CS module.**
 - CMF validates statuses against its **own** registered data, not your static entity: "Status is not valid for the status set" usually means the status never reached CMF, belongs to another definition, has a duplicated GUID, or the pair isn't in the state machine.
 - **CMF never changes status by itself.** `Case_CloseActivity` updates it only when you pass Status; `Case_UpdateStatus` validates against the state machine.
-- `Case_CloseActivity` is synchronous and **commits the current transaction**; `Case_CloseActivityAsync` closes later through a process.
+- The reviewed API documents commits in `Case_CloseActivity`, `Activity_AssignToGroup` and `Case_DiscardActivity`. Verify every called action against the installed version. `Case_CloseActivityAsync` requests later closure; record pending state and reconciliation rather than reporting immediate completion.
 - Access control: Read/Write, enforced only when the definition has `HasAccessControl`; highest of definition and instance grants wins; single-case actions raise, list actions silently filter; since 1.5.2 fetch actions require a registered user.
 - Version-specific bugs and changes (1.5.1–1.5.3): `references/operations-and-deployment.md` §6.
 
@@ -144,8 +152,8 @@ Details: `references/architecture-and-modules.md`.
 3. Bottom-up: CS entity (Id = Case Identifier, `StatusId`) + config static entities → BL bootstrap and verify → BL wrappers (create, actions, collaboration, reads) → process (outsystems-bpt) with `Case_AssociateProcess` and `Case_Complete` → CW blocks → FE inbox, detail, routing table.
 4. Name every element as you create it (`references/architecture-and-modules.md` §6).
 5. Wire security, transaction order, mirror, SLA, notifications and timeline **before** calling it done.
-6. **Verify on the platform** (`BLL-01`, `CLL-07`): publish, wait for Ready, run the bootstrap twice, create a case, walk every spec transition, try a transition not in the state machine, an action not allowed, another user's case, a blocked task, a delegated task, an SLA on a holiday, a double submit. Report what you saw.
-7. Finish with the architecture skill's `templates/build-report.md` there.
+6. **Verify on the platform** (`BLL-01`, `CLL-07`): publish when authorized, wait for Ready, run the bootstrap twice, create a case, walk every spec transition, try a transition not in the state machine, an action not allowed, another user's case, a blocked task, a delegated task, an SLA on a holiday, a double submit. Report what you saw.
+7. Finish with the architecture skill's `build-report.md` in the architecture skill’s templates directory when installed; otherwise report the evidence stages and remaining work from this skill’s templates.
 
 ### Reviewing
 1. Step 0; run the validator on the definition (export it from the static entities if no spec exists).

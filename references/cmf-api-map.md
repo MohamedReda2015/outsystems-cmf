@@ -1,5 +1,8 @@
 # CMF API map (O11, Forge 9179, 1.5.x)
 
+**Transaction review:** the official API also documents commits in `Activity_AssignToGroup` and `Case_DiscardActivity`, not just `Case_CloseActivity`. Verify installed behavior and consult [commit inventory](verification-and-reliability.md) before composing calls.
+
+
 A **starting point for the inventory** (`CAR-03`), never a substitute for it. ✔ = name seen in official docs or release notes; ◐ = from forum answers or partial doc text; verify the signature in the installed module before use. CMF modules are protected: you can reference their public elements but not open them (`COP-09`).
 
 ## Modules

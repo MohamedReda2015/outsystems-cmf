@@ -10,3 +10,5 @@ Follow the OutSystems CMF skill in `outsystems-cmf/` (copy that folder into the 
 2. The core rules in `outsystems-cmf/adapters/AGENTS.md` (between the BEGIN/END markers) are always in force.
 3. Before building a case type, fill `outsystems-cmf/templates/case-definition-spec.md`, export it to JSON and run `node outsystems-cmf/scripts/check_case_definition.mjs <definition.json>`.
 4. For reviews, cite rule IDs from `references/review-checklist.md` and use `templates/cmf-review-report.md`.
+
+- Use `references/verification-and-reliability.md` for evidence and domain acceptance checks. Distinguish prepared, validated, merged, published and runtime verified; preserve task scope and existing authorization.

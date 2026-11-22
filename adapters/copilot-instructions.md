@@ -9,7 +9,7 @@ When helping with an OutSystems 11 case-management app built on the Case Managem
 
 You are designing, building or reviewing an OutSystems 11 case-management app on the Case Management Framework (CMF). The full skill is in `outsystems-cmf/`: `SKILL.md` is the entry point, `references/` hold the details, `references/review-checklist.md` defines the rule IDs. Layering comes from `outsystems-architecture`; BL code from `outsystems-backend-conventions`; processes from `outsystems-bpt`; screens from `outsystems-frontend-conventions`.
 
-**Precedence**: project conventions > this house standard > OutSystems CMF documentation; the installed CMF modules are the truth for API names. Security and status-integrity rules are never relaxed silently: flag and ask.
+**Precedence**: project choices govern supported conventions; house rules supply defaults. Installed contracts and official version-matched documentation determine platform behavior. Escalate unresolved material conflicts, not routine preference differences.
 
 **Placement**: CMF is a shared Core framework app, installed as shipped, same version everywhere, never edited. Only `<App>_BL` (folder `CaseManagement`, adapter `_CmfAdapter`) references `CaseServices_API` / `CaseConfigurations_API` / `CaseProcessConfigurations_API`. CS holds the business entity (`CaseId`, mirrored `StatusId`) and configuration static entities; CW holds case blocks; FE holds inbox, detail, activity screens and the activity→screen routing table.
 
@@ -21,14 +21,15 @@ You are designing, building or reviewing an OutSystems 11 case-management app on
 - `CaseDefinitionConfiguration` / `CaseStatusConfiguration` records with GUIDs generated once, never changed, reused or copied; Name/Alias ≤ 50; one initial status; unused items set `IsActive = False`, never deleted.
 - A "When Published" bootstrap calls the non-deprecated setup action with complete `SetupData`, then verifies what CMF registered and that the definition is Ready. A status only in your static entity is not known to CMF.
 - CMF never changes status by itself: the wrapper passes the target status (`Case_CloseActivity` with Status, or `Case_UpdateStatus` for system transitions), one mechanism per transition, every transition registered as a state-machine pair.
-- `Case_CloseActivity` commits the transaction: validate and write everything (including the entity's status mirror) first, close last — or use `Case_CloseActivityAsync` deliberately.
+- Inventory commit boundaries: `Case_CloseActivity`, `Activity_AssignToGroup` and `Case_DiscardActivity` document commits. Validate/write before the applicable boundary; async close needs pending-state reconciliation, not an immediate confirmed-status mirror.
 - Human activities assigned to groups; pickup/takeover/release/block/skip through BL wrappers; allowed actions recomputed on the server; rejecting actions require a comment; the process ends with `Case_Complete`.
 - `HasAccessControl = True` for restricted cases; minimal definition-level grants, per-case grants at instance level (highest wins); every wrapper checks role + CMF access + ownership; ids reloaded; no CMF reads for anonymous users.
-- Create the case and launch its process explicitly inside the BL use case, then `Case_AssociateProcess`; no Destination screens from Core processes.
+- Create the case and launch its process explicitly inside the BL use case, then `Case_AssociateProcess`; FE routing is the house default; a supported weak screen destination is not an upward strong-reference violation.
 - Purge settings explicit; due dates tested with real calendars on the installed version; CMF modules are protected — diagnose via API and logs, never SQL on CMF tables.
 - SLAs with CMF calendars on the server; every SLA has an escalation. Delegation via CMF. Notifications after commit (templates or outbox).
 - Case history = CMF timeline + Audit_Lib for business data; timeline fetched on demand through a role-filtered BL wrapper.
 - Inbox server-side paged/filtered with counts in one call; action bar built from server options with a double-submit guard.
 - CMF upgrades and process/definition changes are separate changes with an API diff, a running-instance plan and a regression run.
 - Verify every transition of the spec in the running app before saying "done".
+- Use `references/verification-and-reliability.md` for evidence and domain acceptance checks. Distinguish prepared, validated, merged, published and runtime verified; preserve task scope and existing authorization.
 <!-- END core rules -->

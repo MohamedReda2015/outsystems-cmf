@@ -140,10 +140,24 @@ It works on its own; the companions add the detail behind the cited IDs.
 Semantic versioning in `SKILL.md` (`metadata.version`) and [`CHANGELOG.md`](CHANGELOG.md): new rules = minor, wording fixes = patch, changed meaning of an existing ID = major. Each release tag `vX.Y.Z` matches `SKILL.md` and has `outsystems-cmf-vX.Y.Z.zip` (built with `git archive`, repository plumbing excluded) attached on the [Releases](https://github.com/MohamedReda2015/outsystems-cmf/releases) page.
 
 ## Contributing
-Corrections with evidence from an installed CMF version are especially welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) and the unverified list in [`research/sources.md`](research/sources.md). Run `node scripts/check_skill.mjs` and `node scripts/test_validator.mjs` before a pull request.
+Corrections with evidence from an installed CMF version are especially welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) and the unverified list in [`research/sources.md`](research/sources.md). Run the good and bad definition fixtures with the supplied validator, and review links, rule IDs and adapters as described in CONTRIBUTING.md.
 
 ## Disclaimer
 Not affiliated with, endorsed by, or sponsored by OutSystems. "OutSystems" and related names are trademarks of OutSystems. CMF behaviour differs between versions and some API details could not be verified from public documentation: always check action names and signatures against the CMF modules installed in your environment. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## License
 [MIT](LICENSE)
+
+
+## Reliability review (Unreleased)
+
+The updated guidance separates installed platform behavior, house conventions and observed project lessons. Read [verification and reliability](references/verification-and-reliability.md) for domain acceptance checks and primary sources. Changes are recorded under Unreleased; this does not declare a new upstream release.
+
+Repository maintenance checks (full Git checkout):
+
+```sh
+node scripts/check_skill.mjs
+node scripts/test_validator.mjs
+```
+
+These maintenance scripts are excluded from the release archive.

@@ -38,5 +38,13 @@ node scripts/test_validator.mjs     # validator regression
 - Update `CHANGELOG.md`. Bump `metadata.version` in `SKILL.md` for releases (semantic versioning: new rules = minor, wording fixes = patch, changed meaning of an existing ID = major).
 - If you change the core rules block in `adapters/AGENTS.md`, copy it to `adapters/copilot-instructions.md` (the checker compares them).
 
+## Reliability review guidance
+
+Use `CRV` for verification and reliability review rules. These are manual acceptance checks unless a script explicitly implements them. Keep platform facts, house conventions and observed project lessons distinct, and link primary sources from `references/verification-and-reliability.md`.
+
+Verify wrapper names against the installed CMF API. Static definition checks do not prove effective permissions, implicit commits or runtime recovery; record that evidence separately.
+
+Run repository maintenance checks from a full Git checkout. Release archives intentionally exclude these scripts; installed skill packages still include the runtime validators.
+
 ## Code of conduct
 By participating you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).

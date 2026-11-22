@@ -26,7 +26,7 @@ Rules: `CSL-01` … `CSL-10`. API names: `references/cmf-api-map.md`.
 - Non-production test override: a site property redirecting all notifications to a test address, empty in production.
 
 ## 4. Audit and timeline (`CSL-04`, `CSL-08`)
-- **Case history = CMF process audit + history** (`Case_GetActivitiesTimeline`, `Case_GetHistory`, `Case_GetAllHistoryByIdAndDate`). Business data changes = house Audit_Lib (architecture skill `references/audit-trail.md` there). No third history table (`CSL-04`).
+- **Case history = CMF process audit + history** (`Case_GetActivitiesTimeline`, `Case_GetHistory`, `Case_GetAllHistoryByIdAndDate`). Business data changes = house Audit_Lib (architecture skill `outsystems-architecture/references/audit-trail.md` there). No third history table (`CSL-04`).
 - Timeline through a BL read wrapper: role-filtered (internal vs external), localized, paged, fetched on demand (`CSL-08`).
 - On versions before 1.5.3, group-assigned activities were missing from `Case_GetActivitiesTimeline` (`CLL-14`). A forum thread also asks how to see manual reassignments in `Case_GetHistory`: verify the events you need appear.
 

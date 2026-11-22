@@ -1,6 +1,6 @@
 # Operations: deployment, upgrades, versioning, monitoring, testing
 
-Rules: `COP-01` … `COP-10`. Builds on the architecture skill's `references/lifecycle-and-sop.md` there (LifeTime, hotfixes, Definition of Done).
+Rules: `COP-01` … `COP-10`. Builds on the architecture skill's `outsystems-architecture/references/lifecycle-and-sop.md` there (LifeTime, hotfixes, Definition of Done).
 
 ## Contents
 1. Environments and versions
@@ -59,7 +59,7 @@ Kill switches for every case timer (bootstrap, reconciliation, SLA escalation, n
 5. Access: does the expected user have instance access, group membership, an active delegation?
 6. Errors like **"Status is not valid for the status set"** → (a) the GUID is unique and belongs to this definition; (b) CMF actually has it: `CaseDefinition_GetStatusList` / `CaseDefinition_CheckValidStatus` — a record in your `CaseStatusConfiguration` alone is not enough, CMF validates its own `CaseStatus` data filled by the setup; (c) the bootstrap ran and the definition is Ready (not Loading/Error); (d) the move is a registered state-machine pair; (e) re-run the bootstrap timer and check its log (`CLL-01`, `CLL-18`, `CLL-19`).
 7. Fix the cause in code/config; fix the case through a documented admin action (`system:` transition) in the process admin back office, with audit (`PEX-02`) — never with SQL on CMF or `OSSYS_BPM_*` tables (`PEX-04`).
-For process-level triage (process status → activity status → error log → wait condition → assignment → inbox filter) use outsystems-bpt `references/operations-and-versioning.md` there (§3).
+For process-level triage (process status → activity status → error log → wait condition → assignment → inbox filter) use outsystems-bpt `outsystems-bpt/references/operations-and-versioning.md` there (§3).
 
 ### Protected modules (`COP-09`)
 CMF modules are protected: you can't open them to debug. Diagnose through the public API (`CheckApplicationStatus`, `CaseDefinition_GetStatusList`, `Case_GetDetailsByCaseId`, `Case_GetHistory`), Service Center (process monitoring, error and general logs) and your adapter's logs (log CMF inputs/outputs with the correlation id, masked). Community answers that "fix" cases with UPDATE statements on CMF's internal tables are not supported: don't (`PEX-04`).

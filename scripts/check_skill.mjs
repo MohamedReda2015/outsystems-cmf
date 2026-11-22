@@ -52,13 +52,13 @@ for (const f of files.filter((x) => x.endsWith(".md"))) {
 
 // 3. Own rule IDs: defined once in the checklist (or lessons), every cited own ID defined
 const checklist = read("references/review-checklist.md");
-const defined = [...checklist.matchAll(/^\| ((?:CAR|CDF|CST|CAC|CSC|CSL|CUI|COP)-\d+) \|/gm)].map((m) => m[1]);
+const defined = [...checklist.matchAll(/^\| ((?:CAR|CDF|CST|CAC|CSC|CSL|CUI|COP|CRV)-\d+) \|/gm)].map((m) => m[1]);
 const lessons = [...read("references/lessons-learned.md").matchAll(/^\| `(CLL-\d+)` \|/gm)].map((m) => m[1]);
 const all = [...defined, ...lessons];
 const dup = all.filter((id, i) => all.indexOf(id) !== i);
 if (dup.length) errors.push(`duplicate rule IDs ${[...new Set(dup)].join(", ")}`);
 const definedSet = new Set(all);
-const idRe = /\b(CAR|CDF|CST|CAC|CSC|CSL|CUI|COP|CLL)-(\d+)\b/g;
+const idRe = /\b(CAR|CDF|CST|CAC|CSC|CSL|CUI|COP|CRV|CLL)-(\d+)\b/g;
 const SELF = new Set(["scripts/check_skill.mjs"]);
 for (const f of files.filter((x) => /\.(md|mjs|json)$/.test(x) && !SELF.has(x))) {
   for (const m of read(f).matchAll(idRe)) {
